@@ -1,0 +1,44 @@
+<html>
+   <head>
+      <title>Sample Page</title>
+   </head>
+   
+   <body>
+      
+
+      <img src="images/cloud.png" alt="clouds">
+
+    <div>Index page,Hello World!</div>
+
+    <div>
+      <form id="myGetform" action = "" method = "GET">
+        First Name: <input type = "text" name = "first_name">  <br>
+        Last Name: <input type = "text" name = "last_name">
+        <input type = "submit" value = "Submit">
+        </form>
+    </div>
+    <div>
+        <form id="myPostform" action = "" method = "POST">
+            First Name: <input type = "text" name = "first_name">  <br>
+            Last Name: <input type = "text" name = "last_name">
+            <input type = "submit" value = "Submit">
+        </form>
+    </div>
+
+    <div>
+        <form id="filePost" action = "" method = "POST" 
+         enctype = "multipart/form-data">
+         <input type="file" name="singleInputFileName" size="50" />
+         <br />
+         <input type = "submit" value = "Upload File" />
+      </form>
+    </div>
+
+    <script>
+    document.getElementById("myGetform").action = 'http://' + document.domain + ':8082/process_get' ;
+    document.getElementById("myPostform").action = 'http://' + document.domain + ':8082/process_post' ;
+    document.getElementById("filePost").action = 'http://' + document.domain + ':8082/file_upload' ;
+    </script>
+   </body>
+
+</html>
