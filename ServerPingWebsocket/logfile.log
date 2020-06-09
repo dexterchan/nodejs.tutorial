@@ -1,0 +1,10 @@
+{
+  level: 'error',
+  message: 'time.toISOString is not a function',
+  timestamp: '2020-06-09T10:27:47.710Z'
+}
+{
+  level: 'error',
+  message: 'Date.now(...).toISOString is not a function',
+  timestamp: '2020-06-09T11:03:29.132Z'
+}

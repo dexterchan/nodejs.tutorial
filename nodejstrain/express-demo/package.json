@@ -1,0 +1,25 @@
+{
+  "name": "express-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.0.0",
+    "debug": "^4.1.0",
+    "express": "^4.16.4",
+    "helmet": "^3.15.0",
+    "joi": "^14.1.1",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
+    "pug": "^2.0.3",
+    "swagger": "^0.7.5"
+  }
+}
