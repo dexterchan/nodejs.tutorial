@@ -1,7 +1,11 @@
 const { logger } = require("@logger");
+const { MarketDataInterface } = require("@services/marketDataService");
 const ClientPool = new Set();
 
 const getConnectedHost = (socket) => socket.handshake.headers.host;
+
+const marketDataInterface = new MarketDataInterface();
+marketDataInterface.connect();
 
 function onConnect(socket) {
   const connectedHost = getConnectedHost(socket);
@@ -18,11 +22,16 @@ function onDisconnect(socket) {
 }
 
 function onMarketDataSubscription(socket) {
-  socket.on("//blp/mktdata", async (socket) => {});
+  socket.on("//blp/mktdata", async (mktRequest) => {
+    marketDataInterface.subscribe(mktRequest, (mktdata) => {
+      logger.info(mktdata);
+      socket.emit("//blp/mktdata/response", mktdata);
+    });
+  });
 }
 
 function onRefDataSubscription(socket) {
-  socket.on("//blp/refdata", async (socket) => {});
+  socket.on("//blp/refdata", async (refDataRequest) => {});
 }
 
 module.exports = (io) => {

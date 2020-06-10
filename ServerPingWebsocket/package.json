@@ -35,7 +35,8 @@
     "@routes": "routes",
     "@logger": "startup/logging",
     "@startup": "startup",
-    "@model": "model"
+    "@model": "model",
+    "@services": "services"
   },
   "jest": {
     "moduleNameMapper": {
@@ -44,7 +45,8 @@
       "@routes/(.*)": "<rootDir>/routes/$1",
       "@logger": "<rootDir>/startup/logging",
       "@startup": "<rootDir>/startup/$1",
-      "@model/(.*)": "<rootDir>/model/$1"
+      "@model/(.*)": "<rootDir>/model/$1",
+      "@services/(.*)": "<rootDir>/services/$1"
     },
     "moduleFileExtensions": [
       "js",
