@@ -7,6 +7,7 @@ describe("check subscription request format ", () => {
   it("should verify ok for the market data request format", () => {
     const mktRequest = {
       mktdatacode: "AAPL 150117C00600000 EQUITY",
+      fields: ["BID", "ASK"],
     };
     const { error } = validateMarketDataRequest(mktRequest);
     expect(error).toBeNull();

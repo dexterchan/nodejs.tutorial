@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +26,8 @@
   },
   "devDependencies": {
     "jest": "^26.0.1",
-    "mocha": "^7.2.0"
+    "mocha": "^7.2.0",
+    "supertest": "^4.0.2"
   },
   "_moduleAliases": {
     "@utils": "utils",
@@ -34,5 +36,23 @@
     "@logger": "startup/logging",
     "@startup": "startup",
     "@model": "model"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "@utils/(.*)": "<rootDir>/utils/$1",
+      "@middleware/(.*)": "<rootDir>/middleware/$1",
+      "@routes/(.*)": "<rootDir>/routes/$1",
+      "@logger": "<rootDir>/startup/logging",
+      "@startup": "<rootDir>/startup/$1",
+      "@model/(.*)": "<rootDir>/model/$1"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx",
+      "ts",
+      "tsx",
+      "node"
+    ]
   }
 }

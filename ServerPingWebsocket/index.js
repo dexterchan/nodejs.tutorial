@@ -6,6 +6,8 @@ const [http, io] = require("./startup/route")(app);
 
 const port = process.env.PORT || 3000;
 
-http.listen(port, () => {
+const server = http.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+module.exports = server;
