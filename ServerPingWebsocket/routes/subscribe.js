@@ -1,30 +1,31 @@
 const { logger } = require("@logger");
 const { MarketDataInterface } = require("@services/marketDataService");
-const ClientPool = new Set();
+const ClientMap = new Set();
 
 const getConnectedHost = (socket) => socket.handshake.headers.host;
 
-const marketDataInterface = new MarketDataInterface();
-marketDataInterface.connect();
+let marketDataInterface;
 
 function onConnect(socket) {
   const connectedHost = getConnectedHost(socket);
   logger.info(`a new connection from ${connectedHost}`);
-  ClientPool.add(socket);
+  ClientMap[socket] = connectedHost;
 }
 
 function onDisconnect(socket) {
   socket.on("disconnect", async (socket) => {
-    const connectedHost = getConnectedHost(socket);
-    logger.info(`disconnect from ${connectedHost}`);
-    ClientPool.delete(socket);
+    if (socket in ClientMap) {
+      const connectedHost = ClientMap[socket];
+      logger.info(`disconnect from ${connectedHost}`);
+      delete ClientMap[socket];
+    }
   });
 }
 
 function onMarketDataSubscription(socket) {
   socket.on("//blp/mktdata", async (mktRequest) => {
     marketDataInterface.subscribe(mktRequest, (mktdata) => {
-      logger.info(mktdata);
+      //logger.info(mktdata);
       socket.emit("//blp/mktdata/response", mktdata);
     });
   });
@@ -35,6 +36,8 @@ function onRefDataSubscription(socket) {
 }
 
 module.exports = (io) => {
+  marketDataInterface = new MarketDataInterface();
+  marketDataInterface.connect();
   io.on("connection", (socket) => {
     onConnect(socket);
     onDisconnect(socket);
