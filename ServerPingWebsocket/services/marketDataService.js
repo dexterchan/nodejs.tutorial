@@ -18,10 +18,7 @@ class DummyMarketDataImpl extends MarketDataInterface {
   dummyData = (mktDataRequest, consumerFunc, ms) =>
     new Promise((resolve, reject) => {
       this.subscriptionMap[mktDataRequest.mktdatacode] = setInterval(() => {
-        consumerFunc({
-          Bid: Math.random() * (this.max - this.min) + this.min,
-          Ask: Math.random() * (this.max - this.min) + this.min,
-        });
+        consumerFunc(this.pollMarketData(mktDataRequest.mktdatacode));
       }, ms);
     });
 
@@ -35,6 +32,13 @@ class DummyMarketDataImpl extends MarketDataInterface {
     Object.entries(this.subscriptionMap).forEach(([key, value]) => {
       clearInterval(this.subscriptionMap[key]);
     });
+  }
+  pollMarketData(mktdatacode) {
+    return {
+      timestamp_ms: new Date().getTime(),
+      Bid: Math.random() * (this.max - this.min) + this.min,
+      Ask: Math.random() * (this.max - this.min) + this.min,
+    };
   }
 }
 
