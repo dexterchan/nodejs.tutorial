@@ -13,7 +13,9 @@ function onConnect(socket) {
 }
 
 function onDisconnect(socket) {
-  socket.on("disconnect", async (socket) => {
+  socket.on("disconnecting", (msg) => {
+    logger.info(`detect disconnection ${socket.id} ${msg}`);
+    console.log(`detect disconnection ${socket.id} ${msg}`);
     if (socket in ClientMap) {
       const connectedHost = ClientMap[socket];
       logger.info(`disconnect from ${connectedHost} and clear subscription`);
