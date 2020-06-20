@@ -1,3 +1,4 @@
+const { logger } = require("@logger");
 class MarketDataSubject {
   constructor(mktdatacode) {
     this.mktdatacode = mktdatacode;
@@ -5,6 +6,7 @@ class MarketDataSubject {
   }
   notifyObservers(msg) {
     for (let observerKey in this.observers) {
+      logger.info("publish data to " + observerKey + ":" + JSON.stringify(msg));
       this.observers[observerKey].update(msg);
     }
   }
@@ -12,7 +14,7 @@ class MarketDataSubject {
     this.observers[observer.clientId] = observer;
   }
   removeObserver(clientId) {
-    delete this.observers[clientId];
+    if (clientId in this.observers) delete this.observers[clientId];
   }
 }
 module.exports = {

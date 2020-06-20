@@ -13,7 +13,13 @@ module.exports = (app) => {
   });
 
   const http = require("http").createServer(app);
-  const io = require("socket.io")(http);
+  const io = require("socket.io")(http, {
+    serveClient: false,
+    // below are engine.IO options
+    pingInterval: 5000,
+    pingTimeout: 2000,
+    cookie: false,
+  });
   app.use("/api/ping", ping);
 
   require("@routes/subscribe")(io);

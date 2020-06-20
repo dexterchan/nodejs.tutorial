@@ -17,7 +17,7 @@ describe("market Date service", () => {
         mktdatacode: "AAPL 150117C00600000 EQUITY",
         fields: ["BID", "ASK"],
       };
-      marketDataInterface.subscribe(mktRequest, (mktdata) => {
+      marketDataInterface.subscribe("abcd", mktRequest, (mktdata) => {
         logger.info(mktdata);
       });
       await sleep(WAIT_MS);
