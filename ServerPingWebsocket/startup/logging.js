@@ -7,7 +7,7 @@ const logger = createLogger({
   format: combine(timestamp(), prettyPrint()),
   transports: [
     new transports.Console(),
-    new transports.File({ filename: "logfile.log" }),
+    //new transports.File({ filename: "logfile.log" }),
   ],
 });
 

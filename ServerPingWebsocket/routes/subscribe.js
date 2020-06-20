@@ -9,20 +9,20 @@ let marketDataInterface;
 function onConnect(socket) {
   const connectedHost = getConnectedHost(socket);
   logger.info(`a new connection from ${connectedHost}`);
-  ClientMap[socket] = connectedHost;
+  ClientMap[socket.id] = connectedHost;
 }
 
 function onDisconnect(socket) {
   socket.on("disconnecting", (msg) => {
     logger.info(`detect disconnection ${socket.id} ${msg}`);
     console.log(`detect disconnection ${socket.id} ${msg}`);
-    if (socket in ClientMap) {
-      const connectedHost = ClientMap[socket];
+    if (socket.id in ClientMap) {
+      const connectedHost = ClientMap[socket.id];
       logger.info(`disconnect from ${connectedHost} and clear subscription`);
       console.log(`disconnect from ${connectedHost} and clear subscription`);
       marketDataInterface.unsubscribeAll(socket.id);
 
-      delete ClientMap[socket];
+      delete ClientMap[socket.id];
     }
   });
 }
