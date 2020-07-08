@@ -40,6 +40,7 @@
     "@services": "services"
   },
   "jest": {
+    "testEnvironment": "node",
     "moduleNameMapper": {
       "@utils/(.*)": "<rootDir>/utils/$1",
       "@middleware/(.*)": "<rootDir>/middleware/$1",
