@@ -1,4 +1,5 @@
 require("express-async-errors");
+const config = require("config");
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
 
@@ -7,7 +8,7 @@ const logger = createLogger({
   format: combine(timestamp(), prettyPrint()),
   transports: [
     new transports.Console(),
-    //new transports.File({ filename: "logfile.log" }),
+    new transports.File({ filename: config.get("logfileName") }),
   ],
 });
 

@@ -45,6 +45,7 @@ function onRefDataSubscription(socket) {
   socket.on("//blp/refdata", async (refDataRequest) => {});
 }
 
+const { tailLogEndPoint } = require("./taillog");
 module.exports = (io) => {
   marketDataInterface = new MarketDataInterface();
   marketDataInterface.connect();
@@ -52,5 +53,6 @@ module.exports = (io) => {
     onConnect(socket);
     onDisconnect(socket);
     onMarketDataSubscription(socket);
+    tailLogEndPoint(socket);
   });
 };
