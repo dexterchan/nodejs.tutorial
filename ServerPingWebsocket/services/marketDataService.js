@@ -1,10 +1,12 @@
 const { sleep } = require("@utils/basic");
 const { logger } = require("@logger");
 const { validateMarketDataRequest } = require("@model/marketData");
+const { MarketDataSubject } = require("@model/Subject");
+const { MktDataObserver } = require("@model//Observer");
 
 class MarketDataInterface {
   connect() {}
-  subscribe(mktDataRequest, consumerFunc) {}
+  subscribe(clientId, mktDataRequest, consumerFunc) {}
   disconnect() {}
 }
 
@@ -14,24 +16,48 @@ class DummyMarketDataImpl extends MarketDataInterface {
     this.timeInterval = 200;
     this.min = 1;
     this.max = 10;
+    this.subjectMap = {};
+    this.isAlive = true;
+    this.___listenData();
   }
-  dummyData = (mktDataRequest, consumerFunc, ms) =>
-    new Promise((resolve, reject) => {
-      this.subscriptionMap[mktDataRequest.mktdatacode] = setInterval(() => {
-        consumerFunc(this.pollMarketData(mktDataRequest.mktdatacode));
-      }, ms);
-    });
 
-  subscribe(mktDataRequest, consumerFunc) {
+  ___listenData = () => {
+    new Promise(async (resolve, reject) => {
+      while (this.isAlive) {
+        Object.entries(this.subjectMap).forEach(([mktdatacode, subject]) => {
+          subject.notifyObservers(this.pollMarketData(mktdatacode));
+        });
+        await sleep(this.timeInterval);
+      }
+    });
+  };
+  subscribe(clientId, mktDataRequest, consumerFunc) {
     const rString = JSON.stringify(mktDataRequest);
     validateMarketDataRequest(mktDataRequest);
     logger.info(`Market data subscription on mktdata ${rString}`);
-    this.dummyData(mktDataRequest, consumerFunc, this.timeInterval);
+    this.__addSubscription(clientId, mktDataRequest.mktdatacode, consumerFunc);
+  }
+  unsubscribe(clientId, mktdatacode) {
+    if (mktdatacode in this.subjectMap) {
+      this.subjectMap[mktdatacode].removeObserver(clientId);
+    }
+  }
+  unsubscribeAll(clientId) {
+    this.subjectMap;
+    Object.entries(this.subjectMap).forEach(([mktdatacode, subject]) => {
+      this.unsubscribe(clientId, mktdatacode);
+    });
+  }
+
+  __addSubscription(clientId, mktdatacode, consumerFunc) {
+    const mktdataObserver = new MktDataObserver(clientId, consumerFunc, null);
+    if (!(mktdatacode in this.subjectMap)) {
+      this.subjectMap[mktdatacode] = new MarketDataSubject(mktdatacode);
+    }
+    this.subjectMap[mktdatacode].registerObserver(mktdataObserver);
   }
   disconnect() {
-    Object.entries(this.subscriptionMap).forEach(([key, value]) => {
-      clearInterval(this.subscriptionMap[key]);
-    });
+    this.isAlive = false;
   }
   pollMarketData(mktdatacode) {
     return {

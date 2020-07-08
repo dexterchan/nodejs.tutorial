@@ -9,7 +9,15 @@ const WAIT_MS = 10 * 1000;
 const connectMktDataAsync = async (hostname, port) =>
   new Promise(async (resolve, reject) => {
     const url = `http://${hostname}:${port}`;
-    const vssocket = require("socket.io-client")(url);
+    const vssocket = require("socket.io-client")(url, {
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            user: "abc",
+          },
+        },
+      },
+    });
     vssocket.on("connect", () => {
       resolve(vssocket);
     });
@@ -25,12 +33,12 @@ describe("//blp/mktdata", () => {
     hostname = "localhost";
     port = 3000;
   });
-
+  /*
   it("should return time", async () => {
     const res = await getExec("/api/ping/time");
     console.log(res.text);
     expect(res.status).toBe(200);
-  });
+  });*/
   it(
     "should connect market data ",
     async () => {
@@ -44,6 +52,7 @@ describe("//blp/mktdata", () => {
       let count = 0;
       vssocket.on("//blp/mktdata/response", (mktdata) => {
         console.log(mktdata);
+        if (typeof mktdata == "string") mktdata = JSON.parse(mktdata);
         count++;
         expect(mktdata).toHaveProperty("Bid");
         expect(mktdata).toHaveProperty("Ask");
@@ -56,8 +65,9 @@ describe("//blp/mktdata", () => {
       await sleep(WAIT_MS);
       expect(count).toBeGreaterThan(0);
       vssocket.close();
+      await sleep(WAIT_MS);
     },
-    WAIT_MS * 2
+    WAIT_MS * 10
   );
 
   afterAll(() => {
