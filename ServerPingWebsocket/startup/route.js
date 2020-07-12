@@ -4,6 +4,18 @@ const cors = require("cors");
 const { error } = require("../middleware/error");
 const ping = require("@routes/ping");
 
+const whitelist = ["http://localhost:3000", "http://example2.com"];
+const corsOptions = {
+  credentials: true, // This is important.
+  origin: (origin, callback) => {
+    /*
+    if (whitelist.includes(origin)) return callback(null, true);
+    callback(new Error("Not allowed by CORS"));
+*/
+    callback(null, true);
+  },
+};
+
 module.exports = (app) => {
   app.use(cors());
   app.use(express.json());
@@ -19,7 +31,25 @@ module.exports = (app) => {
     pingInterval: 5000,
     pingTimeout: 2000,
     cookie: false,
+    handlePreflightRequest: (req, res) => {
+      console.log("fxxk cors");
+      const headers = {
+        "Access-Control-Allow-Headers":
+          "Content-Type, Authorization, user, token",
+        "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+        "Access-Control-Allow-Credentials": true,
+      };
+      res.writeHead(200, headers);
+      res.end();
+    },
   });
+  /*
+  io.origins((origin, callback) => {
+    if (origin !== "https://foo.example.com") {
+      return callback("origin not allowed", false);
+    }
+    callback(null, true);
+  });*/
   app.use("/api/ping", ping);
 
   require("@routes/subscribe")(io);

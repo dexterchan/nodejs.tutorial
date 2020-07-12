@@ -12,12 +12,15 @@ async function connectMktClient(hostname, port, mktdatacode) {
 
   vssocket.on("//blp/mktdata/response", (data) => {
     counter += 1;
-    console.log("receive mkt data:", data);
+    console.log(`${mktdatacode}:`, data);
   });
   //});
 }
 
+hostname = "ALB-947481995.us-east-2.elb.amazonaws.com";
 hostname = "localhost";
 port = 3000;
 mktdatacode = "AAPL 150117C00600000 EQUITY";
+connectMktClient(hostname, port, mktdatacode);
+mktdatacode = "AMZN 150117C00600000 EQUITY";
 connectMktClient(hostname, port, mktdatacode);
