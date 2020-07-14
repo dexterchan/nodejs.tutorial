@@ -6,7 +6,7 @@ const {
   sleep,
 } = require("../utils/basic");
 let counter = 0;
-async function connectMktClient(protocal, hostname, port, mktdatacode) {
+async function connectMktClient(protocol, hostname, port, mktdatacode) {
   //return new Promise(async (resolve, reject) => {
   //const vssocket = await connectServerAsync(hostname, port);
   const vssocket = await connectServerProtocolAsync(protocol, hostname, port);
