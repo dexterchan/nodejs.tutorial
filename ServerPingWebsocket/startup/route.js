@@ -32,7 +32,6 @@ module.exports = (app) => {
     pingTimeout: 2000,
     cookie: false,
     handlePreflightRequest: (req, res) => {
-      console.log("fxxk cors");
       const headers = {
         "Access-Control-Allow-Headers":
           "Content-Type, Authorization, user, token",

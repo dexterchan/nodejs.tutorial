@@ -11,7 +11,6 @@ class AsyncSubsribeField extends Component {
     myValue: "",
   };
   updateStateValue(mktValue) {
-    console.log(mktValue);
     const { Bid, Ask } = mktValue;
     const value = Bid.toFixed(this.rounding) + "/" + Ask.toFixed(this.rounding);
     this.setState({ myValue: value });

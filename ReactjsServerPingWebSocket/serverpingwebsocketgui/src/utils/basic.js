@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+
 const connectServerAsync = async (hostname, port) =>
   new Promise(async (resolve, reject) => {
     const url = `http://${hostname}:${port}`;
