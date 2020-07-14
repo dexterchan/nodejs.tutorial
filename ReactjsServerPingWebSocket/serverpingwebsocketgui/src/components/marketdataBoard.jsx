@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./css/mktdataboard.css";
 import MarketDataTable from "./marketdataTable";
-import SearchBox from "./common/searchbox";
 import { SearchMktCode } from "../utils/SearchMktCode";
 import { MKTDATAMAP } from "../config/EquityCodeMap";
 import { makeStyles } from "@material-ui/core/styles";

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { connectMktClient } from "../services/connectMktData";
 import {
+  protocol,
   mktdataserverhostname,
   mktdataserverport,
 } from "../config/systemconfig";
@@ -18,6 +19,7 @@ class AsyncSubsribeField extends Component {
   async componentDidMount() {
     const { mktCode } = this.props;
     await connectMktClient(
+      protocol,
       mktdataserverhostname,
       mktdataserverport,
       mktCode,

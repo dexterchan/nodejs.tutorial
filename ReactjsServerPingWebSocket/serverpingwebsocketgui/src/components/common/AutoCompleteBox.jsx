@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const AutocompleteBox = ({ value, onChange, shortlist }) => {
+  console.log(value);
   return (
     <Autocomplete
       id="free-solo-2-demo"
@@ -15,7 +16,7 @@ const AutocompleteBox = ({ value, onChange, shortlist }) => {
           label="Market Data Code"
           margin="normal"
           variant="outlined"
-          InputProps={{ ...params.InputProps, type: "search" }}
+          // InputProps={{ ...params.InputProps, type: "search" }}
           value={value}
           onChange={(e) => onChange(e.currentTarget.value)}
         />

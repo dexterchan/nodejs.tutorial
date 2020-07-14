@@ -62,11 +62,17 @@ class DummyMarketDataImpl extends MarketDataInterface {
   pollMarketData(mktdatacode) {
     const amzn = /AMZN (\w*) EQUITY/;
     const apple = /AAPL (\w*) EQUITY/;
+    const msft = /MSFT (\w*) EQUITY/;
+    const tsla = /TSLA (\w*) EQUITY/;
     let basePrice = 0;
     if (mktdatacode.match(amzn)) {
       basePrice = 3200 + (Math.random() * (this.max - this.min) + this.min);
     } else if (mktdatacode.match(apple)) {
       basePrice = 380 + (Math.random() * (this.max - this.min) + this.min);
+    } else if (mktdatacode.match(msft)) {
+      basePrice = 207.07 + (Math.random() * (this.max - this.min) + this.min);
+    } else if (mktdatacode.match(tsla)) {
+      basePrice = 1500 + (Math.random() * (this.max - this.min) + this.min);
     } else {
       basePrice = Math.random() * (this.max - this.min) + this.min;
     }
@@ -74,8 +80,8 @@ class DummyMarketDataImpl extends MarketDataInterface {
     return {
       timestamp_ms: new Date().getTime(),
       mktdatacode,
-      Bid: basePrice * 1.05,
-      Ask: basePrice * 0.95,
+      Bid: basePrice * 1.001,
+      Ask: basePrice * 0.999,
     };
   }
 }

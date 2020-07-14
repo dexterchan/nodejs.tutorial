@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { logger } = require("@logger");
 
 const { error } = require("../middleware/error");
 const ping = require("@routes/ping");
@@ -32,6 +33,7 @@ module.exports = (app) => {
     pingTimeout: 2000,
     cookie: false,
     handlePreflightRequest: (req, res) => {
+      logger.info(`connect from ${req.headers.origin}`);
       const headers = {
         "Access-Control-Allow-Headers":
           "Content-Type, Authorization, user, token",

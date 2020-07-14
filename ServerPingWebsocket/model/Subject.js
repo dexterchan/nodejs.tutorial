@@ -6,7 +6,7 @@ class MarketDataSubject {
   }
   notifyObservers(msg) {
     for (let observerKey in this.observers) {
-      logger.info("publish data to " + observerKey + ":" + JSON.stringify(msg));
+      //logger.info("publish data to " + observerKey + ":" + JSON.stringify(msg));
       this.observers[observerKey].update(msg);
     }
   }

@@ -1,7 +1,16 @@
-const { connectServerAsync } = require("../utils/basic");
+const {
+  connectServerAsync,
+  connectServerProtocolAsync,
+} = require("../utils/basic");
 
-async function connectMktClient(hostname, port, mktdatacode, callback) {
-  const vssocket = await connectServerAsync(hostname, port);
+async function connectMktClient(
+  protocol,
+  hostname,
+  port,
+  mktdatacode,
+  callback
+) {
+  const vssocket = await connectServerProtocolAsync(protocol, hostname, port);
 
   const mktRequest = {
     mktdatacode,
