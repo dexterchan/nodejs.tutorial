@@ -3,7 +3,7 @@ const {
   connectServerProtocolAsync,
 } = require("../utils/basic");
 
-async function connectMktClient(
+export async function connectMktClient(
   protocol,
   hostname,
   port,
@@ -22,7 +22,3 @@ async function connectMktClient(
     callback(data);
   });
 }
-
-module.exports = {
-  connectMktClient,
-};

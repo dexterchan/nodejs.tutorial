@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 
 import { connectMktClient } from "../services/connectMktData";
-import {
-  protocol,
-  mktdataserverhostname,
-  mktdataserverport,
-} from "../config/systemconfig";
+
+import connectSetting from "../config/GetSystemConfig";
+
 class AsyncSubsribeField extends Component {
   rounding = 2;
   state = {
@@ -17,6 +15,12 @@ class AsyncSubsribeField extends Component {
     this.setState({ myValue: value });
   }
   async componentDidMount() {
+    const {
+      protocol,
+      mktdataserverhostname,
+      mktdataserverport,
+    } = connectSetting;
+
     const { mktCode } = this.props;
     await connectMktClient(
       protocol,
