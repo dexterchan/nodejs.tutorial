@@ -61,13 +61,18 @@ export default function MarketDataTable({ dataSourceLst }) {
     onRequestSort(event, property);
   };
 
+  // we make two assumptions here for building the keys:
+  // - the data has a _id field in order to build the keys.
+  // - we don't have two or more columns with the same path
+  // todo: stop doing this
+
   return (
     <TableContainer component={Paper}>
-      <Table aria-label='simple table'>
+      <Table aria-label='simple table' size='small'>
         <TableHead>
-          <TableRow>
+          <TableRow key='header'>
             {columns.map((column) => (
-              <TableCell>
+              <TableCell key={`header-${column.path}`}>
                 <TableSortLabel
                   active={orderBy === column.path}
                   direction={orderBy === column.path ? order : 'asc'}
