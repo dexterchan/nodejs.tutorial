@@ -40,7 +40,6 @@ export default function MarketDataBoard() {
   };
 
   const handleAddMarketData = () => {
-    console.log(searchQuery);
     const item = newMktItem.getSearchItems(searchQuery);
     if (item.length !== 1) {
       return;
