@@ -1,10 +1,10 @@
-const sleep = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
+import io from "socket.io-client";
 
 const connectServerAsync = async (hostname, port) =>
   new Promise(async (resolve, reject) => {
     const url = `http://${hostname}:${port}`;
     try {
-      const vssocket = require("socket.io-client")(url, {
+      const vssocket = io(url, {
         transportOptions: {
           polling: {
             extraHeaders: {
@@ -43,9 +43,4 @@ const connectServerProtocolAsync = async (protocol, hostname, port) =>
       reject(ex);
     }
   });
-
-module.exports = {
-  sleep,
-  connectServerAsync,
-  connectServerProtocolAsync,
-};
+export { connectServerAsync, connectServerProtocolAsync };

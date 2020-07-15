@@ -60,10 +60,28 @@ class DummyMarketDataImpl extends MarketDataInterface {
     this.isAlive = false;
   }
   pollMarketData(mktdatacode) {
+    const amzn = /AMZN (\w*) EQUITY/;
+    const apple = /AAPL (\w*) EQUITY/;
+    const msft = /MSFT (\w*) EQUITY/;
+    const tsla = /TSLA (\w*) EQUITY/;
+    let basePrice = 0;
+    if (mktdatacode.match(amzn)) {
+      basePrice = 3200 + (Math.random() * (this.max - this.min) + this.min);
+    } else if (mktdatacode.match(apple)) {
+      basePrice = 380 + (Math.random() * (this.max - this.min) + this.min);
+    } else if (mktdatacode.match(msft)) {
+      basePrice = 207.07 + (Math.random() * (this.max - this.min) + this.min);
+    } else if (mktdatacode.match(tsla)) {
+      basePrice = 1500 + (Math.random() * (this.max - this.min) + this.min);
+    } else {
+      basePrice = Math.random() * (this.max - this.min) + this.min;
+    }
+
     return {
       timestamp_ms: new Date().getTime(),
-      Bid: Math.random() * (this.max - this.min) + this.min,
-      Ask: Math.random() * (this.max - this.min) + this.min,
+      mktdatacode,
+      Bid: basePrice * 1.001,
+      Ask: basePrice * 0.999,
     };
   }
 }
