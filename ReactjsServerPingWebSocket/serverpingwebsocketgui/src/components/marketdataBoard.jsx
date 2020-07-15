@@ -12,12 +12,7 @@ export default function MarketDataBoard() {
   const [datasourceList, setDataSourceList] = React.useState([]);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [shortlist, setShortlist] = React.useState([]);
-  const [sortColumn, setSortColumn] = React.useState({
-    path: '_id',
-    order: 'asc',
-  });
   const [newMktItem, setNewMktItem] = React.useState(null);
-
   React.useEffect(() => {
     const fetchData = async () => {
       setNewMktItem(new SearchMktCode(MKTDATAMAP));
@@ -25,10 +20,6 @@ export default function MarketDataBoard() {
 
     fetchData();
   }, []);
-
-  const handleSort = (sortColumn) => {
-    setSortColumn(sortColumn);
-  };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -57,8 +48,8 @@ export default function MarketDataBoard() {
 
   return (
     <>
-      <Grid container spacing={5} direction='column' alignItems='center' justify='center'>
-        <Grid container spacing={5} justify='center' alignItems='center'>
+      <Grid container spacing={4} direction='column' alignItems='center' justify='center'>
+        <Grid container spacing={4} justify='center' alignItems='center'>
           <Grid item xs={6}>
             <AutocompleteBox shortlist={shortlist} value={searchQuery} onChange={handleSearch} />
           </Grid>
@@ -70,12 +61,8 @@ export default function MarketDataBoard() {
         </Grid>
 
         <Grid item>{count === 0 && <p className='m-5 '>Showing {count} market data.</p>}</Grid>
-        <Grid item>
-          <MarketDataTable
-            onSort={handleSort}
-            sortColumn={sortColumn}
-            dataSourceLst={datasourceList}
-          />
+        <Grid item xs={8}>
+          <MarketDataTable dataSourceLst={datasourceList} />
         </Grid>
       </Grid>
     </>
