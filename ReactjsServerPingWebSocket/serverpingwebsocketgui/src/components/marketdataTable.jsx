@@ -9,10 +9,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 
-import { TableSortLabel } from '@material-ui/core';
+import { TableSortLabel, IconButton } from '@material-ui/core';
 import MarketDataTableCell from './marketDataTableCell/MarketDataTableCell';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-export default function MarketDataTable({ dataSourceLst }) {
+export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('_id');
 
@@ -95,6 +96,11 @@ export default function MarketDataTable({ dataSourceLst }) {
               {columns.map((column) => (
                 <MarketDataTableCell item={item} column={column} />
               ))}
+              <TableCell key={`remove${item._id}`}>
+                <IconButton onClick={() => onRemoveClick(item._id)}>
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
