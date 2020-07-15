@@ -1,111 +1,83 @@
-import React, { Component } from "react";
-import "./css/mktdataboard.css";
-import MarketDataTable from "./marketdataTable";
-import { SearchMktCode } from "../utils/SearchMktCode";
-import { MKTDATAMAP } from "../config/EquityCodeMap";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import * as React from 'react';
+import './css/mktdataboard.css';
+import MarketDataTable from './marketdataTable';
+import { SearchMktCode } from '../utils/SearchMktCode';
+import { MKTDATAMAP } from '../config/EquityCodeMap';
+import Button from '@material-ui/core/Button';
 
-import AutocompleteBox from "./common/AutoCompleteBox";
+import AutocompleteBox from './common/AutoCompleteBox';
+import { Grid } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-}));
+export default function MarketDataBoard() {
+  const [datasourceList, setDataSourceList] = React.useState([]);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [shortlist, setShortlist] = React.useState([]);
+  const [sortColumn, setSortColumn] = React.useState({
+    path: '_id',
+    order: 'asc',
+  });
+  const [newMktItem, setNewMktItem] = React.useState(null);
 
-class MarketDataBoard extends Component {
-  state = {
-    dataSourceLst: [],
-    searchQuery: "",
-    currentPage: 1,
-    shortlist: [],
-    sortColumn: { path: "_id", order: "asc" },
-    newMktItem: null,
+  React.useEffect(() => {
+    const fetchData = async () => {
+      setNewMktItem(new SearchMktCode(MKTDATAMAP));
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn);
   };
 
-  constructor(props) {
-    super(props);
-    this.searchMktCode = null;
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const newShortListItems = newMktItem.getSearchItems(query);
+    setShortlist(newShortListItems.map((item) => `${item._key_}:${item.value}`));
+  };
+
+  const handleAddMarketData = () => {
+    const item = newMktItem.getSearchItems(searchQuery);
+    if (item.length !== 1) {
+      return;
+    }
+
+    const data = datasourceList;
+    data.push({ _id: item[0].value, price: item[0]._key_ });
+    setDataSourceList(data);
+    setSearchQuery(item.value);
+    setShortlist([]);
+  };
+
+  if (!newMktItem) {
+    return 'loading';
   }
 
-  handleSort = (sortColumn) => {
-    this.setState({ sortColumn });
-  };
+  const count = datasourceList ? datasourceList.length : 0;
 
-  handleSearch = (query) => {
-    this.setState({ searchQuery: query });
-    const newShortListItems = this.searchMktCode.getSearchItems(query);
-    const newShortList = newShortListItems.map(
-      (item) => `${item._key_}:${item.value}`
-    );
-    const newMktItem =
-      newShortListItems.length === 1 ? newShortListItems[0].value : null;
+  return (
+    <>
+      <Grid container spacing={5} direction='column' alignItems='center' justify='center'>
+        <Grid container spacing={5} justify='center' alignItems='center'>
+          <Grid item xs={6}>
+            <AutocompleteBox shortlist={shortlist} value={searchQuery} onChange={handleSearch} />
+          </Grid>
+          <Grid item xs={1}>
+            <Button variant='contained' color='primary' onClick={() => handleAddMarketData()}>
+              Add
+            </Button>
+          </Grid>
+        </Grid>
 
-    this.setState({ shortlist: newShortList, newMktItem });
-  };
-
-  handleAddMarketData = () => {
-    const { dataSourceLst, newMktItem } = this.state;
-    dataSourceLst.push({ _id: newMktItem, price: newMktItem });
-    console.log(dataSourceLst);
-    this.setState({
-      dataSourceLst,
-      searchQuery: "",
-      shortlist: [],
-      newMktItem,
-    });
-  };
-
-  async componentDidMount() {
-    this.searchMktCode = new SearchMktCode(MKTDATAMAP);
-  }
-
-  render() {
-    const { dataSourceLst, sortColumn, searchQuery, shortlist } = this.state;
-    let count = dataSourceLst.length;
-
-    let totalCount = count;
-
-    return (
-      <div className="mktdataboard-header">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-5">
-              <AutocompleteBox
-                shortlist={shortlist}
-                value={searchQuery}
-                onChange={this.handleSearch}
-              />
-            </div>
-            <div className="col-md-5">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => this.handleAddMarketData()}
-              >
-                Add
-              </Button>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col">
-              {count === 0 && (
-                <p className="m-5 "> Showing {totalCount} market data.</p>
-              )}
-              <MarketDataTable
-                onSort={this.handleSort}
-                sortColumn={sortColumn}
-                dataSourceLst={dataSourceLst}
-              ></MarketDataTable>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+        <Grid item>{count === 0 && <p className='m-5 '>Showing {count} market data.</p>}</Grid>
+        <Grid item>
+          <MarketDataTable
+            onSort={handleSort}
+            sortColumn={sortColumn}
+            dataSourceLst={datasourceList}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
 }
-
-export default MarketDataBoard;
