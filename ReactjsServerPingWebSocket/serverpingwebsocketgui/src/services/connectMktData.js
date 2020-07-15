@@ -1,7 +1,4 @@
-const {
-  connectServerAsync,
-  connectServerProtocolAsync,
-} = require("../utils/basic");
+const { connectServerProtocolAsync } = require("../utils/basic");
 
 export async function connectMktClient(
   protocol,
