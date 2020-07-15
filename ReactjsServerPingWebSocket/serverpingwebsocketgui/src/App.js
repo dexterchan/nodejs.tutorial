@@ -36,7 +36,7 @@ function App() {
 
   return (
     <>
-      <Container className={classes.app} maxWidth={false} style={{ minHeight: '100hv' }}>
+      <Container className={classes.app} maxWidth={false} disableGutters>
         <ThemeProvider theme={darkTheme}>
           <MarketDataBoard />
         </ThemeProvider>
