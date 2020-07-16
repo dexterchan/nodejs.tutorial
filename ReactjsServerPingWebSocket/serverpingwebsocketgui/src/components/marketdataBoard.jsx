@@ -8,8 +8,20 @@ import Button from '@material-ui/core/Button';
 import AutocompleteBox from './common/AutoCompleteBox';
 import { Grid } from '@material-ui/core';
 
+const handleItem = (state, event) => {
+  switch (event.type) {
+    case 'add':
+      state.push(event.payload);
+      return state;
+    case 'remove':
+      return state.filter((item) => item._id !== event.payload);
+    default:
+      return state;
+  }
+};
+
 export default function MarketDataBoard() {
-  const [datasourceList, setDataSourceList] = React.useState([]);
+  const [datasourceList, dispatch] = React.useReducer(handleItem, []);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [shortlist, setShortlist] = React.useState([]);
   const [newMktItem, setNewMktItem] = React.useState(null);
@@ -33,11 +45,14 @@ export default function MarketDataBoard() {
       return;
     }
 
-    const data = datasourceList;
-    data.push({ _id: item[0].value, price: item[0]._key_ });
-    setDataSourceList(data);
-    setSearchQuery(item.value);
+    dispatch({
+      type: 'add',
+      payload: { _id: item[0].value, price: item[0]._key_ },
+    });
+    setSearchQuery('');
     setShortlist([]);
+
+    console.log(datasourceList);
   };
 
   if (!newMktItem) {
@@ -62,7 +77,15 @@ export default function MarketDataBoard() {
 
         <Grid item>{count === 0 && <p className='m-5 '>Showing {count} market data.</p>}</Grid>
         <Grid item xs={8}>
-          <MarketDataTable dataSourceLst={datasourceList} />
+          <MarketDataTable
+            dataSourceLst={datasourceList}
+            onRemoveClick={(elementId) => {
+              dispatch({
+                type: 'remove',
+                payload: elementId,
+              });
+            }}
+          />
         </Grid>
       </Grid>
     </>
