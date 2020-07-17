@@ -8,8 +8,20 @@ import Button from "@material-ui/core/Button";
 import AutocompleteBox from "./common/AutoCompleteBox";
 import { Grid } from "@material-ui/core";
 
+const handleItem = (state, event) => {
+  switch (event.type) {
+    case "add":
+      state.push(event.payload);
+      return state;
+    case "remove":
+      return state.filter((item) => item._id !== event.payload);
+    default:
+      return state;
+  }
+};
+
 export default function MarketDataBoard() {
-  const [datasourceList, setDataSourceList] = React.useState([]);
+  const [datasourceList, dispatch] = React.useReducer(handleItem, []);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [shortlist, setShortlist] = React.useState([]);
   const [newItems, setNewItems] = React.useState([]);
@@ -38,9 +50,10 @@ export default function MarketDataBoard() {
     }
     const item = newItems[0];
 
-    const data = datasourceList;
-    data.push({ _id: item.value, price: item._key_ });
-    setDataSourceList(data);
+    dispatch({
+      type: "add",
+      payload: { _id: item.value, price: item._key_ },
+    });
     setSearchQuery("");
     setShortlist([]);
   };
@@ -83,7 +96,15 @@ export default function MarketDataBoard() {
           {count === 0 && <p className="m-5 ">Showing {count} market data.</p>}
         </Grid>
         <Grid item xs={8}>
-          <MarketDataTable dataSourceLst={datasourceList} />
+          <MarketDataTable
+            dataSourceLst={datasourceList}
+            onRemoveClick={(elementId) => {
+              dispatch({
+                type: "remove",
+                payload: elementId,
+              });
+            }}
+          />
         </Grid>
       </Grid>
     </>
