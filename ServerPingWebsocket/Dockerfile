@@ -15,18 +15,12 @@ RUN chown -R ${APPUSER}:${APPUSER} $MY_HOME
 
 ENV PATH $MY_HOME:/usr/local/bin:$PATH
 
-COPY ./ ./
-RUN rm -Rf node_modules
-RUN rm -Rf package-lock.json
-
-
-
 RUN apt-get update \
     && apt-get -y install python openssl build-essential git \
     && apt-get -y clean
-
-RUN npm install
-
+COPY package.json .
+RUN npm install --prod
+COPY ./ ./
 RUN chown -R $APPUSER:$APPUSER $MY_HOME
 
 FROM node:14.4.0-buster-slim
