@@ -1,33 +1,33 @@
-import * as React from 'react';
+import * as React from "react";
 
-import AsyncSubsribeField from './asyncSubscribeField';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import TableCell from '@material-ui/core/TableCell';
+import AsyncSubsribeField from "./asyncSubscribeField";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import TableCell from "@material-ui/core/TableCell";
 
-import { TableSortLabel, IconButton } from '@material-ui/core';
-import MarketDataTableCell from './marketDataTableCell/MarketDataTableCell';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { TableSortLabel, IconButton } from "@material-ui/core";
+import MarketDataTableCell from "./marketDataTableCell/MarketDataTableCell";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('_id');
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("_id");
 
   const onRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
   const columns = [
-    { path: '_id', label: 'Identifier' },
+    { path: "_id", label: "Identifier" },
     {
-      path: 'price',
-      label: 'Bid/Ask',
+      path: "price",
+      label: "Bid/Ask",
       content: (sec) => <AsyncSubsribeField mktCode={sec._id} />,
     },
   ];
@@ -53,7 +53,7 @@ export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
   }
 
   function getComparator(order, orderBy) {
-    return order === 'desc'
+    return order === "desc"
       ? (a, b) => descendingComparator(a, b, orderBy)
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
@@ -69,20 +69,22 @@ export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
 
   return (
     <TableContainer component={Paper}>
-      <Table aria-label='simple table' size='small'>
+      <Table aria-label="simple table" size="small">
         <TableHead>
-          <TableRow key='header'>
+          <TableRow key="header">
             {columns.map((column) => (
               <TableCell key={`header-${column.path}`}>
                 <TableSortLabel
                   active={orderBy === column.path}
-                  direction={orderBy === column.path ? order : 'asc'}
+                  direction={orderBy === column.path ? order : "asc"}
                   onClick={createSortHandler(column.path)}
                 >
                   {column.label}
                   {orderBy === column.path ? (
                     <span hidden>
-                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
                     </span>
                   ) : null}
                 </TableSortLabel>
@@ -91,18 +93,24 @@ export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {stableSort(dataSourceLst, getComparator(order, orderBy)).map((item) => (
-            <TableRow key={item._id}>
-              {columns.map((column) => (
-                <MarketDataTableCell item={item} column={column} />
-              ))}
-              <TableCell key={`remove${item._id}`}>
-                <IconButton onClick={() => onRemoveClick(item._id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+          {stableSort(dataSourceLst, getComparator(order, orderBy)).map(
+            (item) => (
+              <TableRow key={item._id}>
+                {columns.map((column) => (
+                  <MarketDataTableCell
+                    key={column.path}
+                    item={item}
+                    column={column}
+                  />
+                ))}
+                <TableCell key={`remove${item._id}`}>
+                  <IconButton onClick={() => onRemoveClick(item._id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            )
+          )}
         </TableBody>
       </Table>
     </TableContainer>
