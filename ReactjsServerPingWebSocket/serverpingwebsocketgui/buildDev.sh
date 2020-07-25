@@ -1,0 +1,1 @@
+echo "module.exports = 'dev';" > src/sysflag.js
