@@ -31,7 +31,6 @@ module.exports = (app) => {
     // below are engine.IO options
     pingInterval: 5000,
     pingTimeout: 2000,
-    cookie: false,
     handlePreflightRequest: (req, res) => {
       logger.info(`connect from ${req.headers.origin}`);
       const headers = {

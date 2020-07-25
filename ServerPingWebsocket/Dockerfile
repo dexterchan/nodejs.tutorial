@@ -36,5 +36,5 @@ WORKDIR $MY_HOME
 COPY --from=build-env $MY_HOME ./
 
 ENV PATH $MY_HOME:/usr/local/bin:$PATH
-
+EXPOSE 3000
 CMD ["npm","start"]
