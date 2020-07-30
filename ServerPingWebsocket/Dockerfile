@@ -1,4 +1,4 @@
-FROM node:14.4.0-buster-slim as build-env
+from node:14.6.0-alpine3.10 as build-env
 
 USER root
 
@@ -7,33 +7,35 @@ ENV APPUSER node_user
 ENV MY_HOME /opt/app
 RUN mkdir -p $MY_HOME
 ENV PATH $MY_HOME/bin:$PATH
-RUN groupadd --system --gid=9999 ${APPUSER} && \
-    useradd --system --home-dir $MY_HOME --uid=9999 --gid=${APPUSER} ${APPUSER}
+
+
+ENV LD_LIBRARY_PATH /lib64
+RUN apk add --update libc6-compat
+RUN apk add --virtual build-dependencies \
+    build-base \
+    gcc
 WORKDIR $MY_HOME
 
-RUN chown -R ${APPUSER}:${APPUSER} $MY_HOME
-
 ENV PATH $MY_HOME:/usr/local/bin:$PATH
-
-RUN apt-get update \
-    && apt-get -y install python openssl build-essential git \
-    && apt-get -y clean
 COPY package.json .
 RUN npm install --prod
 COPY ./ ./
-RUN chown -R $APPUSER:$APPUSER $MY_HOME
 
-FROM node:14.4.0-buster-slim
+from node:14.6.0-alpine3.10 
 ENV APPUSER node_user
 # Prepare environment
 ENV MY_HOME /opt/app
 RUN mkdir -p $MY_HOME
 ENV PATH $MY_HOME/bin:$PATH
-RUN groupadd --system --gid=9999 ${APPUSER} && \
-    useradd --system --home-dir $MY_HOME --uid=9999 --gid=${APPUSER} ${APPUSER}
+
+ENV LD_LIBRARY_PATH /lib64
+RUN apk add --update libc6-compat
+
+RUN addgroup -S $APPUSER && adduser -D -S -H -G $APPUSER -h $MY_HOME $APPUSER
 WORKDIR $MY_HOME
 
 COPY --from=build-env $MY_HOME ./
+RUN chown -R ${APPUSER}:${APPUSER} $MY_HOME
 
 ENV PATH $MY_HOME:/usr/local/bin:$PATH
 EXPOSE 3000

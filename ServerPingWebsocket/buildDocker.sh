@@ -1,3 +1,5 @@
 #!/bin/bash
-docker build --tag pigpiggcp/serverpingwebsocket:v0.nodejs .
-docker push pigpiggcp/serverpingwebsocket:v0.nodejs
+
+VERSION=v1
+docker build --tag pigpiggcp/serverpingwebsocket:$VERSION.nodejs .
+#docker push pigpiggcp/serverpingwebsocket:$VERSION.nodejs
