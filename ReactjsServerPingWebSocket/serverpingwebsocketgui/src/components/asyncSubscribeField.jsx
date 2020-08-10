@@ -51,7 +51,7 @@ class AsyncSubsribeField extends Component {
   }
 
   componentWillUnmount() {
-    const { mktCode } = this.props;
+    //const { mktCode } = this.props;
     //console.log(`disconnect ${mktCode}`);
     this._isMounted = false;
     if (!_.isUndefined(this.vssocket)) this.vssocket.disconnect();
