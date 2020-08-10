@@ -3,10 +3,12 @@ import React, { Component } from "react";
 import { connectMktClient } from "../services/connectMktData";
 
 import connectSetting from "../config/GetSystemConfig";
+import _ from "lodash";
 
 class AsyncSubsribeField extends Component {
   rounding = 2;
   _isMounted = false;
+  vssocket = undefined;
   state = {
     myValue: "",
   };
@@ -35,7 +37,7 @@ class AsyncSubsribeField extends Component {
     } = connectSetting;
 
     const { mktCode } = this.props;
-    await connectMktClient(
+    this.vssocket = await connectMktClient(
       protocol,
       mktdataserverhostname,
       mktdataserverport,
@@ -49,7 +51,10 @@ class AsyncSubsribeField extends Component {
   }
 
   componentWillUnmount() {
+    const { mktCode } = this.props;
+    //console.log(`disconnect ${mktCode}`);
     this._isMounted = false;
+    if (!_.isUndefined(this.vssocket)) this.vssocket.disconnect();
   }
 
   render() {

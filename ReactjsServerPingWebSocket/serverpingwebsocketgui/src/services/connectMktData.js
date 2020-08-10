@@ -16,7 +16,9 @@ export async function connectMktClient(
   vssocket.emit("//blp/mktdata", mktRequest);
 
   vssocket.on("//blp/mktdata/response", (data) => {
-    //console.log(`${mktdatacode}-` + JSON.stringify(data));
+    console.log(`${mktdatacode}-` + JSON.stringify(data));
     if (mktdatacode === data.mktdatacode) callback(data);
   });
+
+  return vssocket;
 }
