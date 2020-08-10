@@ -10,10 +10,11 @@ class AsyncSubsribeField extends Component {
   state = {
     myValue: "",
   };
-  updateStateValue(rawMktValue) {
+  updateStateValue(mktCode, rawMktValue) {
     const mktValue =
       typeof rawMktValue == "string" ? JSON.parse(rawMktValue) : rawMktValue;
 
+    //console.log(`${mktCode}:` + JSON.stringify(rawMktValue));
     const { Bid, Ask } = mktValue;
     if (Bid !== undefined && Ask !== undefined) {
       const value =
@@ -41,7 +42,7 @@ class AsyncSubsribeField extends Component {
       mktCode,
       (data) => {
         if (this._isMounted) {
-          this.updateStateValue(data);
+          this.updateStateValue(mktCode, data);
         }
       }
     );
