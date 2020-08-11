@@ -1,0 +1,30 @@
+#https://artillery.io/docs/socketio-reference/
+config:
+  target: "wss://treequery:443"
+  socketio:
+    transports: ["websocket"]
+    extraHeaders:
+      x-client-id: abc
+      user: pigpig
+      token: abcd
+  phases:
+    - duration: 2
+      arrivalRate: 1
+scenarios:
+  - engine: "socketio"
+    flow:
+      - emit:
+          channel: "//blp/mktdata"
+          data:
+            {
+              "mktdatacode": "AAPL 150117C00600000 EQUITY",
+              "fields": ["BID", "ASK"],
+            }
+      - emit:
+          channel: "//blp/mktdata"
+          data:
+            {
+              "mktdatacode": "AMZN 150117C00600000 EQUITY",
+              "fields": ["BID", "ASK"],
+            }
+      - think: 1
