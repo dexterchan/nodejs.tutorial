@@ -12,6 +12,8 @@ const connectServerAsync = async (hostname, port) =>
               token: "abcd",
             },
           },
+          upgrade: false,
+          transports: ["websocket"],
         },
       });
       vssocket.on("connect", () => {

@@ -1,12 +1,15 @@
 const express = require("express");
 const axios = require("axios");
 const e = require("express");
+const AWSXRay = require("aws-xray-sdk");
 
 const SHARD_ADDRESSES = ["http://localhost:4000", "http://localhost:4001"];
 const PORT = process.env.PORT || 3001;
 const SHARD_COUNT = SHARD_ADDRESSES.length;
 
 const app = express();
+app.use(AWSXRay.express.openSegment("shard"));
+
 app.use(express.json());
 
 function getShardEndpoint(key) {
@@ -47,7 +50,10 @@ app.get("/:key", async (req, res) => {
     res.send(innerRes.data);
   }
 });
-
+app.use(AWSXRay.express.closeSegment());
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+//example:
+//curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data

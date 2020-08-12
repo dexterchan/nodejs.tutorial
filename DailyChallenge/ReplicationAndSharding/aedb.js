@@ -3,8 +3,10 @@ const fs = require("fs");
 
 const PORT = process.env.PORT;
 const DATA_DIR = process.env.DATA_DIR;
+const AWSXRay = require("aws-xray-sdk");
 
 const app = express();
+app.use(AWSXRay.express.openSegment("shard"));
 app.use(express.json());
 
 app.post("/:key", (req, res) => {
@@ -27,7 +29,10 @@ app.get("/:key", (req, res) => {
     res.send(`null:${e.message}`);
   }
 });
-
+app.use(AWSXRay.express.closeSegment());
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+//example:
+//curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:3000/data
