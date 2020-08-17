@@ -49,7 +49,8 @@ const hostname = "localhost";
 const path = "blp/mktdata";
 let mktdatacode = "AAPL 150117C00600000 EQUITY";
 const name = "apple";
-const token = "abcd";
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYXBwX3VzZXIiLCJyb2xlIjoidXNlciIsImlhdCI6MTU5NzY3MDAwNiwiZXhwIjoxNjAwMjYyMDA2fQ.08BzvJSQpS3FCLXs8gwrXPkO7IQB0xLAloM_a32b7m8";
 
 testConnectMktClientMsg(
   protocol,
