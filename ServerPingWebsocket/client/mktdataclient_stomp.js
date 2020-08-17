@@ -60,6 +60,7 @@ testConnectMktClientMsg(
   name,
   token
 );
+
 mktdatacode = "AMZN 150117C00600001 EQUITY";
 testConnectMktClientMsg(
   protocol,
