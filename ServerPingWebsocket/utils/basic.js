@@ -1,8 +1,13 @@
 const sleep = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
 
-const connectServerAsync = async (hostname, port) =>
+const connectServerProtocolAsync = async (
+  protocol,
+  hostname,
+  port,
+  path = ""
+) =>
   new Promise(async (resolve, reject) => {
-    const url = `http://${hostname}:${port}`;
+    const url = `${protocol}://${hostname}:${port}/${path}`;
     try {
       const vssocket = require("socket.io-client")(url, {
         transportOptions: {
@@ -13,28 +18,8 @@ const connectServerAsync = async (hostname, port) =>
             },
           },
         },
-      });
-      vssocket.on("connect", () => {
-        resolve(vssocket);
-      });
-    } catch (ex) {
-      reject(ex);
-    }
-  });
-
-const connectServerProtocolAsync = async (protocol, hostname, port) =>
-  new Promise(async (resolve, reject) => {
-    const url = `${protocol}://${hostname}:${port}`;
-    try {
-      const vssocket = require("socket.io-client")(url, {
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              user: "pigpig",
-              token: "abcd",
-            },
-          },
-        },
+        upgrade: false,
+        transports: ["websocket"],
       });
       vssocket.on("connect", () => {
         resolve(vssocket);
@@ -46,6 +31,5 @@ const connectServerProtocolAsync = async (protocol, hostname, port) =>
 
 module.exports = {
   sleep,
-  connectServerAsync,
   connectServerProtocolAsync,
 };

@@ -1,7 +1,7 @@
-const { connectServerAsync, sleep } = require("../utils/basic");
+const { connectServerProtocolAsync, sleep } = require("../utils/basic");
 
 async function getLogs(hostname, port) {
-  const vssocket = await connectServerAsync(hostname, port);
+  const vssocket = await connectServerProtocolAsync("ws", hostname, port);
   vssocket.emit("/tailLog", "");
 
   vssocket.on("/tailLog/response", (data) => {
