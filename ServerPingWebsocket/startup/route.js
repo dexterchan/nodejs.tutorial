@@ -24,6 +24,9 @@ module.exports = (app) => {
   app.get("/", (req, res) => {
     res.send("OK");
   });
+  app.get("/mgt/health", (req, res) => {
+    res.send("UP");
+  });
 
   const http = require("http").createServer(app);
   const io = require("socket.io")(http, {
