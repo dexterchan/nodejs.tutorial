@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const axios = require("axios");
 const WebSocket = require("ws");
 function generateMktRequest(mktdatacode) {
   const sessionid = uuidv4();
@@ -43,12 +44,54 @@ const testConnectMktClientMsg = async (
   );
 };
 
-const protocol = "ws";
-const port = 3000;
-const hostname = "localhost";
+const protocol = "wss";
+const port = 443;
+const hostname = "treequery.org";
 const path = "blp/mktdata";
-let mktdatacode = "AAPL 150117C00600000 EQUITY";
+
 const name = "apple";
+const tokenURL = "https://api.treequery.org/marketdatatoken";
+axios
+  .get(tokenURL)
+  .then(function (response) {
+    // handle success
+    if (response.status != 200) {
+      throw new Error("failed to retrieve token");
+    }
+    const body = response.data;
+    const jwt_token = body["jwt"];
+
+    let mktdatacode = "AAPL 150117C00600000 EQUITY";
+    testConnectMktClientMsg(
+      protocol,
+      hostname,
+      port,
+      path,
+      mktdatacode,
+      name,
+      jwt_token
+    );
+
+    mktdatacode = "AMZN 150117C00600001 EQUITY";
+    testConnectMktClientMsg(
+      protocol,
+      hostname,
+      port,
+      path,
+      mktdatacode,
+      name,
+      jwt_token
+    );
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  });
+
+/*
 const token =
   "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3N1ZXIiOiJNYXJrZXQgRGF0YSBTdHJlYW1pbmcgc2VydmljZSBMYW1iZGEiLCJleHAiOjE2MDA1MTA5NDZ9.UDP9ayzdohZqqTrPnZlJLTWHb9mrhCZut1WDbD_FFI0";
 
@@ -72,3 +115,4 @@ testConnectMktClientMsg(
   name,
   token
 );
+*/

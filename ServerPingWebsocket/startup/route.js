@@ -25,7 +25,7 @@ module.exports = (app) => {
     res.send("OK");
   });
   app.get("/mgt/health", (req, res) => {
-    res.send("UP");
+    res.send("UP from JS");
   });
 
   const http = require("http").createServer(app);
