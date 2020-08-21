@@ -1,3 +1,4 @@
+const { argv } = require("yargs");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios");
 const WebSocket = require("ws");
@@ -44,13 +45,13 @@ const testConnectMktClientMsg = async (
   );
 };
 
-const protocol = "wss";
-const port = 443;
-const hostname = "treequery.org";
+const protocol = argv.protocol;
+const hostname = argv.hostname;
+const port = parseInt(argv.port);
 const path = "blp/mktdata";
 
-const name = "apple";
-const tokenURL = "https://api.treequery.org/marketdatatoken";
+const name = "user1";
+const tokenURL = "https://token.treequery.org/marketdatatoken";
 axios
   .get(tokenURL)
   .then(function (response) {
@@ -60,7 +61,6 @@ axios
     }
     const body = response.data;
     const jwt_token = body["jwt"];
-
     let mktdatacode = "AAPL 150117C00600000 EQUITY";
     testConnectMktClientMsg(
       protocol,
@@ -90,29 +90,3 @@ axios
   .then(function () {
     // always executed
   });
-
-/*
-const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3N1ZXIiOiJNYXJrZXQgRGF0YSBTdHJlYW1pbmcgc2VydmljZSBMYW1iZGEiLCJleHAiOjE2MDA1MTA5NDZ9.UDP9ayzdohZqqTrPnZlJLTWHb9mrhCZut1WDbD_FFI0";
-
-testConnectMktClientMsg(
-  protocol,
-  hostname,
-  port,
-  path,
-  mktdatacode,
-  name,
-  token
-);
-
-mktdatacode = "AMZN 150117C00600001 EQUITY";
-testConnectMktClientMsg(
-  protocol,
-  hostname,
-  port,
-  path,
-  mktdatacode,
-  name,
-  token
-);
-*/
