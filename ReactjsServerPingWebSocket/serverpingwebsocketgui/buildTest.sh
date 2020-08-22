@@ -1,1 +1,1 @@
-echo "module.exports = 'test';" > src/sysflag.js
+echo "module.exports = 'test_stomp';" > src/sysflag.js

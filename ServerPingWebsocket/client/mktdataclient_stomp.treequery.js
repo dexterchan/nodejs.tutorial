@@ -51,9 +51,13 @@ const port = parseInt(argv.port);
 const path = "blp/mktdata";
 
 const name = "user1";
-const tokenURL = "https://token.treequery.org/marketdatatoken";
+const tokenURL = "https://token.treequery.org/token";
 axios
-  .get(tokenURL)
+  .get(tokenURL, {
+    headers: {
+      "x-api-key": "AHYqYPIpdV8VEcdDd0KTO8OgVIA6jNUM6XFsX3H1",
+    },
+  })
   .then(function (response) {
     // handle success
     if (response.status != 200) {

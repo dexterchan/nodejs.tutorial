@@ -4,6 +4,7 @@ export async function connectMktClient(
   protocol,
   hostname,
   port,
+  path,
   mktdatacode,
   callback
 ) {

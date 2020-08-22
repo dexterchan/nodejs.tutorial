@@ -8,4 +8,5 @@ export default {
   protocol: SETTING.protocol,
   mktdataserverhostname: SETTING.mktdataserverhostname,
   mktdataserverport: SETTING.mktdataserverport,
+  path: SETTING.path,
 };

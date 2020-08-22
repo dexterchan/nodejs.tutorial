@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import { connectMktClient } from "../services/connectMktData";
-
+//import { connectMktClient } from "../services/connectMktData";
+import { connectMktClient } from "../services/connectMktData_Stomp";
 import connectSetting from "../config/GetSystemConfig";
 import _ from "lodash";
 
@@ -34,6 +34,7 @@ class AsyncSubsribeField extends Component {
       protocol,
       mktdataserverhostname,
       mktdataserverport,
+      path,
     } = connectSetting;
 
     const { mktCode } = this.props;
@@ -41,6 +42,7 @@ class AsyncSubsribeField extends Component {
       protocol,
       mktdataserverhostname,
       mktdataserverport,
+      path,
       mktCode,
       (data) => {
         if (this._isMounted) {
