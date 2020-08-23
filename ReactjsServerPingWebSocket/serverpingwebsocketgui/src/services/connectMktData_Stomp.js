@@ -21,7 +21,7 @@ export async function connectMktClient(
     },
   });
 
-  if (response.status != 200) {
+  if (response.status !== 200) {
     throw new Error("failed to retrieve token");
   }
   const body = response.data;
