@@ -1,3 +1,4 @@
+import axios from "axios";
 const {
   connectServerProtocolAsync,
   generateMktRequest,
@@ -12,8 +13,19 @@ export async function connectMktClient(
   callback
 ) {
   const name = "userA";
-  const token =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3N1ZXIiOiJNYXJrZXQgRGF0YSBTdHJlYW1pbmcgc2VydmljZSBMYW1iZGEiLCJleHAiOjE2MDA2ODM3MDZ9.l0PY08m5kQFcO8jmaAJtUUx_5WSI-S-iLkZZkg7aSMI";
+  const API_KEY = "RQVRk1f71c4iGP3jNCHSB9L72OHJkc1s9w18VWcP";
+  const tokenURL = "https://api.treequery.org/token";
+  const response = await axios.get(tokenURL, {
+    headers: {
+      "x-api-key": API_KEY,
+    },
+  });
+
+  if (response.status != 200) {
+    throw new Error("failed to retrieve token");
+  }
+  const body = response.data;
+  const token = body["jwt"];
   const stompClient = await connectServerProtocolAsync(
     protocol,
     hostname,
