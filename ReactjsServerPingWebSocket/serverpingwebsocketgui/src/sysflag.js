@@ -1,1 +1,1 @@
-module.exports = 'deploy';
+module.exports = 'test_stomp';
