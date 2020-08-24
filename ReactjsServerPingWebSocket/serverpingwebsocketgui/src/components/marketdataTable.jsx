@@ -13,7 +13,11 @@ import { TableSortLabel, IconButton } from "@material-ui/core";
 import MarketDataTableCell from "./marketDataTableCell/MarketDataTableCell";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
+export default function MarketDataTable({
+  dataSourceLst,
+  apiKeyValue,
+  onRemoveClick,
+}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("_id");
 
@@ -28,7 +32,9 @@ export default function MarketDataTable({ dataSourceLst, onRemoveClick }) {
     {
       path: "price",
       label: "Bid/Ask",
-      content: (sec) => <AsyncSubsribeField mktCode={sec._id} />,
+      content: (sec) => (
+        <AsyncSubsribeField mktCode={sec._id} apiKeyValue={apiKeyValue} />
+      ),
     },
   ];
 

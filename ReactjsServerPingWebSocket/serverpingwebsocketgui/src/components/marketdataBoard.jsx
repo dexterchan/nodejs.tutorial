@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 
 import AutocompleteBox from "./common/AutoCompleteBox";
 import { Grid } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 
 const handleItem = (state, event) => {
   switch (event.type) {
@@ -22,6 +23,9 @@ const handleItem = (state, event) => {
 
 export default function MarketDataBoard() {
   const [datasourceList, dispatch] = React.useReducer(handleItem, []);
+  const [apiKeyValue, setApiKeyValue] = React.useState(
+    "RQVRk1f71c4iGP3jNCHSB9L72OHJkc1s9w18VWcP"
+  );
   const [searchQuery, setSearchQuery] = React.useState("");
   const [shortlist, setShortlist] = React.useState([]);
   const [newItems, setNewItems] = React.useState([]);
@@ -35,6 +39,10 @@ export default function MarketDataBoard() {
     fetchData();
   }, []);
 
+  const handleApiKey = (apiKey) => {
+    setApiKeyValue(apiKey);
+    console.log();
+  };
   const handleSearch = (query) => {
     setSearchQuery(query);
     const newShortListItems = searhMktCode.getSearchItems(query);
@@ -73,12 +81,21 @@ export default function MarketDataBoard() {
         alignItems="center"
         justify="center"
       >
-        <Grid container spacing={4} justify="center" alignItems="center">
-          <Grid item xs={6}>
+        <Grid container spacing={2} justify="center" alignItems="center">
+          <Grid item xs={5}>
             <AutocompleteBox
               shortlist={shortlist}
               value={searchQuery}
               onChange={handleSearch}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              label="AWS-API-Key"
+              margin="normal"
+              variant="outlined"
+              value={apiKeyValue}
+              onChange={handleApiKey}
             />
           </Grid>
           <Grid item xs={1}>
@@ -98,6 +115,7 @@ export default function MarketDataBoard() {
         <Grid item xs={8}>
           <MarketDataTable
             dataSourceLst={datasourceList}
+            apiKeyValue={apiKeyValue}
             onRemoveClick={(elementId) => {
               dispatch({
                 type: "remove",

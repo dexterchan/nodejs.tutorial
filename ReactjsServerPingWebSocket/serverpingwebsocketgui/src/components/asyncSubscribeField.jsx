@@ -37,12 +37,14 @@ class AsyncSubsribeField extends Component {
       path,
     } = connectSetting;
 
-    const { mktCode } = this.props;
+    const { mktCode, apiKeyValue } = this.props;
+
     this.vssocket = await connectMktClient(
       protocol,
       mktdataserverhostname,
       mktdataserverport,
       path,
+      apiKeyValue,
       mktCode,
       (data) => {
         if (this._isMounted) {

@@ -9,11 +9,12 @@ export async function connectMktClient(
   hostname,
   port,
   path,
+  apiKeyValue,
   mktdatacode,
   callback
 ) {
   const name = "userA";
-  const API_KEY = "RQVRk1f71c4iGP3jNCHSB9L72OHJkc1s9w18VWcP";
+  const API_KEY = apiKeyValue;
   const tokenURL = "https://api.treequery.org/token";
   const response = await axios.get(tokenURL, {
     headers: {
