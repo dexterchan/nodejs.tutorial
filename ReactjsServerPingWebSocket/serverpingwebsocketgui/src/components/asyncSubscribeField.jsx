@@ -6,27 +6,30 @@ import connectSetting from "../config/GetSystemConfig";
 import _ from "lodash";
 
 class AsyncSubsribeField extends Component {
-  rounding = 2;
+  rounding = 4;
   _isMounted = false;
   vssocket = undefined;
   state = {
     myValue: "",
   };
+  Bid = "-";
+  Ask = "-";
+
   updateStateValue(mktCode, rawMktValue) {
     const mktValue =
       typeof rawMktValue == "string" ? JSON.parse(rawMktValue) : rawMktValue;
 
-    //console.log(`${mktCode}:` + JSON.stringify(rawMktValue));
-    const { Bid, Ask } = mktValue;
-    if (Bid !== undefined && Ask !== undefined) {
-      const value =
-        Bid.toFixed(this.rounding) + "/" + Ask.toFixed(this.rounding);
-      this.setState({ myValue: value });
-    } else {
-      const mkt = JSON.parse(mktValue);
-      console.log("invalid result" + typeof mktValue);
-      console.log(mkt.Bid);
+    //console.log(`${mktCode}:` + JSON.stringify(mktValue));
+
+    const { valuesMap } = mktValue;
+    if ("BID" in valuesMap) {
+      this.Bid = valuesMap["BID"].toFixed(this.rounding);
     }
+    if ("ASK" in valuesMap) {
+      this.Ask = valuesMap["ASK"].toFixed(this.rounding);
+    }
+    const value = this.Bid + "/" + this.Ask;
+    this.setState({ myValue: value });
   }
   async componentDidMount() {
     this._isMounted = true;

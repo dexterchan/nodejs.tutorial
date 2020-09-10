@@ -1,4 +1,3 @@
-import axios from "axios";
 const {
   connectServerProtocolAsync,
   generateMktRequest,
@@ -15,8 +14,7 @@ export async function connectMktClient(
   callback
 ) {
   const name = "userA";
-  const token = GetAwsJWTToken(apiKeyValue);
-
+  const token = await GetAwsJWTToken(apiKeyValue);
   const stompClient = await connectServerProtocolAsync(
     protocol,
     hostname,
