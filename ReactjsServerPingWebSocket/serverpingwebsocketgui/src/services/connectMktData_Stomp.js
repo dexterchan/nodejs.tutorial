@@ -3,6 +3,7 @@ const {
   connectServerProtocolAsync,
   generateMktRequest,
 } = require("../utils/basicStomp");
+const { GetAwsJWTToken } = require("../utils/GetJWTToken");
 
 export async function connectMktClient(
   protocol,
@@ -14,19 +15,8 @@ export async function connectMktClient(
   callback
 ) {
   const name = "userA";
-  const API_KEY = apiKeyValue;
-  const tokenURL = "https://api.treequery.org/token";
-  const response = await axios.get(tokenURL, {
-    headers: {
-      "x-api-key": API_KEY,
-    },
-  });
+  const token = GetAwsJWTToken(apiKeyValue);
 
-  if (response.status !== 200) {
-    throw new Error("failed to retrieve token");
-  }
-  const body = response.data;
-  const token = body["jwt"];
   const stompClient = await connectServerProtocolAsync(
     protocol,
     hostname,
