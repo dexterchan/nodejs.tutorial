@@ -5,6 +5,7 @@ const tokenURL = "https://api.treequery.org/token";
 export async function GetAwsJWTToken(apiKeyValue) {
   const API_KEY = apiKeyValue;
   let token = "";
+  let expDate = null;
   try {
     const response = await axios.get(tokenURL, {
       headers: {
@@ -17,9 +18,10 @@ export async function GetAwsJWTToken(apiKeyValue) {
     }
     const body = response.data;
     token = body["jwt"];
+    expDate = body["expDate"];
   } catch (ex) {
     console.log("For demo, use dummy token");
     console.log(ex);
   }
-  return token;
+  return { token, expDate };
 }

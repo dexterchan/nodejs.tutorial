@@ -14,7 +14,8 @@ export async function connectMktClient(
   callback
 ) {
   const name = "userA";
-  const token = await GetAwsJWTToken(apiKeyValue);
+  const { token, expDate } = await GetAwsJWTToken(apiKeyValue);
+  console.log(expDate);
   const stompClient = await connectServerProtocolAsync(
     protocol,
     hostname,
