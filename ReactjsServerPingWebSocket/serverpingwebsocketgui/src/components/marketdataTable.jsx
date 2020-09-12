@@ -31,7 +31,7 @@ export default function MarketDataTable({
     { path: "_id", label: "Identifier" },
     {
       path: "price",
-      label: "Bid/Ask",
+      label: "Bid/Ask     (time left remains active)",
       content: (sec) => (
         <AsyncSubsribeField mktCode={sec._id} apiKeyValue={apiKeyValue} />
       ),

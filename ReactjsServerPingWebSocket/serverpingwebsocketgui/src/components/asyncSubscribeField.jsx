@@ -11,9 +11,12 @@ class AsyncSubsribeField extends Component {
   vssocket = undefined;
   state = {
     myValue: "",
+    remainTime: "",
   };
   Bid = "-";
   Ask = "-";
+  expDate = null;
+  timer = null;
 
   updateStateValue(mktCode, rawMktValue) {
     const mktValue =
@@ -42,7 +45,7 @@ class AsyncSubsribeField extends Component {
 
     const { mktCode, apiKeyValue } = this.props;
 
-    this.vssocket = await connectMktClient(
+    const { stompClient, expDate } = await connectMktClient(
       protocol,
       mktdataserverhostname,
       mktdataserverport,
@@ -55,7 +58,23 @@ class AsyncSubsribeField extends Component {
         }
       }
     );
+    this.vssocket = stompClient;
+    this.expDate = expDate;
+    this.timer = setInterval(this.getRemainTimeFunc, 1000);
   }
+
+  getRemainTimeFunc = () => {
+    let remainTime = Math.floor(this.expDate - new Date().getTime() / 1000);
+    if (remainTime <= 0) {
+      clearInterval(this.timer);
+      remainTime = 0;
+    }
+    const seconds = remainTime % 60;
+    const hours = Math.floor(remainTime / 60);
+    const timeText = hours > 0 ? `${hours}h${seconds}s` : `${seconds}s`;
+    this.setState({ remainTime: timeText });
+  };
+  getRemainTime() {}
 
   componentWillUnmount() {
     //const { mktCode } = this.props;
@@ -65,8 +84,12 @@ class AsyncSubsribeField extends Component {
   }
 
   render() {
-    const { myValue } = this.state;
-    return <React.Fragment>{myValue}</React.Fragment>;
+    const { myValue, remainTime } = this.state;
+    return (
+      <React.Fragment>
+        {myValue} ({remainTime})
+      </React.Fragment>
+    );
   }
 }
 
