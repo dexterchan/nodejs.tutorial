@@ -22,6 +22,7 @@ export async function GetAwsJWTToken(apiKeyValue) {
   } catch (ex) {
     console.log("For demo, use dummy token");
     console.log(ex);
+    expDate = Math.floor(Date.now() / 1000 + 35);
   }
   return { token, expDate };
 }
