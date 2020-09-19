@@ -5,9 +5,9 @@
 import uuid from "uuid";
 
 function generateMktRequest(mktdatacode) {
-  const sessionid = uuid.v4();
+  const sessionId = uuid.v4();
   const mktRequest = {
-    sessionid,
+    sessionId,
     mktdatacode,
     fields: ["BID", "ASK"],
   };

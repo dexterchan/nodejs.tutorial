@@ -70,8 +70,8 @@ class AsyncSubsribeField extends Component {
       remainTime = 0;
     }
     const seconds = remainTime % 60;
-    const hours = Math.floor(remainTime / 60);
-    const timeText = hours > 0 ? `${hours}h${seconds}s` : `${seconds}s`;
+    const minutes = Math.floor(remainTime / 60);
+    const timeText = minutes > 0 ? `${minutes}m${seconds}s` : `${seconds}s`;
     this.setState({ remainTime: timeText });
   };
   getRemainTime() {}
